@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* digitalmmm design tokens (PRD Section 4) */
+@theme {
+  --color-ink: #1b222c;
+  --color-paper: #f6f5f0;
+  --color-teal: #1f5f5b;
+  --color-teal-dark: #174a46;
+  --color-amber: #d9a441;
+  --color-sage: #8fa998;
+
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-body: "Source Sans 3 Variable", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Display type: used with restraint, large sizes only */
+.font-display {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-ink);
+}
+
+/* Assembly-line hero: one orchestrated scroll-triggered reveal.
+   Hand-drawn linework animates once when the hero enters the viewport. */
+.assembly-path {
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+}
+.assembly-stage {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.assembly-live .assembly-path {
+  animation: draw-line 1.6s ease-out forwards;
+}
+.assembly-live .assembly-stage {
+  animation: stage-in 0.7s ease-out forwards;
+}
+.assembly-live .assembly-stage:nth-child(1) { animation-delay: 0.2s; }
+.assembly-live .assembly-stage:nth-child(2) { animation-delay: 0.7s; }
+.assembly-live .assembly-stage:nth-child(3) { animation-delay: 1.2s; }
+.assembly-live .assembly-stage:nth-child(4) { animation-delay: 1.7s; }
+
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes stage-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assembly-path { stroke-dashoffset: 0; }
+  .assembly-stage { opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+}
