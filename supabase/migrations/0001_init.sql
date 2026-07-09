@@ -35,9 +35,11 @@ declare
   ref_code text;
   referrer uuid;
 begin
-  -- 8-char url-safe referral code, retry on the (unlikely) collision
+  -- 8-char url-safe referral code, retry on the (unlikely) collision.
+  -- gen_random_bytes lives in the extensions schema on Supabase — must be
+  -- schema-qualified because this function pins search_path = public.
   loop
-    ref_code := lower(substr(replace(replace(encode(gen_random_bytes(6), 'base64'), '/', ''), '+', ''), 1, 8));
+    ref_code := lower(substr(replace(replace(encode(extensions.gen_random_bytes(6), 'base64'), '/', ''), '+', ''), 1, 8));
     exit when not exists (select 1 from public.users where referral_code = ref_code);
   end loop;
 
